@@ -1,0 +1,44 @@
+<html>
+
+<body>
+    <input type="text" id="prompt"> <br>
+    <button onclick="getData()">
+        Make HTTP Request
+    </button>
+
+    <div id="output"></div>
+
+    <script>
+        const promptElem = document.getElementById('prompt');
+        const outputElem = document.getElementById('output');
+        async function getData() {
+            try {
+                const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer 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`
+                    },
+                    body: JSON.stringify({
+                        model: "llama-3.3-70b-versatile",
+                        messages: [{
+                            role: "assistant",
+                            content: 'You are HTML CSS and C language expert expert who give HTML code in response where I can directly insert in div tag which is <div id="output"></div>'
+                        },{
+                            role: "user",
+                            content: promptElem.value
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                outputElem.innerHTML = data.choices[0].message.content
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+
+    </script>
+</body>
+
+</html>
